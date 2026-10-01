@@ -22,7 +22,7 @@
 def homework_loop_sequential_source(chain_length, unroll_factor):
     function = "void homework_loop_sequential(float *b, int size) {"
     #implement me!
-    function_body = "for (int i=0; i<size;i+" +str(unroll_factor) + ") {\n"
+    function_body = "for (int i=0; i<size;i+=" +str(unroll_factor) + ") {\n"
 
     for offset in range (unroll_factor):
         temp="tmp"+str(offset)
@@ -31,8 +31,10 @@ def homework_loop_sequential_source(chain_length, unroll_factor):
         function_body+="float "+temp+" = "+position+";\n"
 
         for i in range (chain_length):
-            function_body+=""+temp+" +="+str(step+1)+".0f;\n"
-        function_body+="}\n"
+            function_body+=""+temp+" +="+str(i+1)+".0f;\n"
+        function_body+=position+"="+temp+";\n"
+
+    function_body+="}\n"
     
     function_close = "}"
     return "\n".join([function, function_body, function_close])
@@ -47,8 +49,24 @@ def homework_loop_sequential_source(chain_length, unroll_factor):
 # the dependency chain also a power of two.
 def homework_loop_interleaved_source(chain_length, unroll_factor):
     function = "void homework_loop_interleaved(float *b, int size) {"
-    #implement me!
-    function_body = ""
+    #implement me!'
+    function_body ="for (int i=0;i<size;i+= "+str(unroll_factor)+") {\n"
+    for i in range(unroll_factor):
+        temp="tmp"+str(i)
+        position="b[i+"+str(i)+"]"
+        function_body +="float "+temp+"="+position+";\n"
+
+    for j in range(chain_length):
+        for i in range(unroll_factor):
+            temp="tmp"+str(i)
+            function_body+=temp+"+="+str(j+1)+".0f;\n"
+
+    for k in range (unroll_factor):
+        temp="tmp"+str(k)
+        position="b[i+"+str(k)+"]"
+        function_body+=position+"="+temp+";\n"
+
+    function_body += "}\n"
     function_close = "}"
     return "\n".join([function, function_body, function_close])
 
