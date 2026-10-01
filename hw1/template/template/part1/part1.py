@@ -22,7 +22,7 @@
 def homework_loop_sequential_source(chain_length, unroll_factor):
     function = "void homework_loop_sequential(float *b, int size) {"
     #implement me!
-    function_body = ""
+    function_body = "  for (int i=0; i<size;i)"
     function_close = "}"
     return "\n".join([function, function_body, function_close])
 
