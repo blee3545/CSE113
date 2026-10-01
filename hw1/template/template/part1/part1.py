@@ -22,7 +22,18 @@
 def homework_loop_sequential_source(chain_length, unroll_factor):
     function = "void homework_loop_sequential(float *b, int size) {"
     #implement me!
-    function_body = "  for (int i=0; i<size;i)"
+    function_body = "for (int i=0; i<size;i+" +str(unroll_factor) + ") {\n"
+
+    for offset in range (unroll_factor):
+        temp="tmp"+str(offset)
+        position ="b[i +"+str(offset)+"]"
+
+        function_body+="float "+temp+" = "+position+";\n"
+
+        for i in range (chain_length):
+            function_body+=""+temp+" +="+str(step+1)+".0f;\n"
+        function_body+="}\n"
+    
     function_close = "}"
     return "\n".join([function, function_body, function_close])
 
