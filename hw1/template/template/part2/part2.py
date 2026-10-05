@@ -19,10 +19,27 @@ def homework_reduction_source(partitions):
     # header
     function = "void homework_reduction(reduce_type *a, int size) {"
 
-    # implement me!
-    function_body = ""
+    #first element of each partition is the partition's partial sum
+    loop_header = (
+        f"  for (int i = {partitions}; i < size; i += {partitions}) {{"
+    )
 
-    # closing brace
+    #loop unroll
+    partial_reductions = [
+        f"    a[{partition}] += a[i + {partition}];"
+        for partition in range(partitions)
+    ]
+    loop_close = "  }"
+
+    cleanup_header = f"  for (int i = 1; i < {partitions}; i++) {{"
+    cleanup_body = "    a[0] += a[i];"
+    cleanup_close = "  }"
+
+    function_body = "\n".join(
+        [loop_header]
+        + partial_reductions
+        + [loop_close, cleanup_header, cleanup_body, cleanup_close]
+    )
+    #closing brace
     function_close = "}"
     return "\n".join([function, function_body,function_close])
-
