@@ -10,12 +10,13 @@
 \usepackage{hyperref}
 \usepackage{listings}
 
-\title{\textbf{Assignment Report}}
+\title{\textbf{Homework 1 Report}\\[0.4em]
+\large Instruction-Level Parallelism and C++ Threads}
 \author{%
-    Your Name\\
-    Email: Your Official Email
+    Brian Lee\\
+    Email: blee134@ucsc.edu
 }
-\date{\today}
+\date{October 5, 2026}
 
 \lstset{
     basicstyle=\ttfamily\small,
@@ -36,80 +37,237 @@
 
 \subsection{Design}
 
-Describe the design of your solution for Part 1.
+The two Python functions generate C++ implementations of the supplied
+element-wise floating-point loop.  Both implementations accept the dependency
+chain length and unroll factor and return a complete C++ function as a string.
+The generated loop advances by the unroll factor; the assignment guarantees
+that this factor divides the array size, so no cleanup loop is needed.
 
-Explain the overall workflow of your implementation and how the different
-components interact. The description should contain enough detail that
-another knowledgeable programmer could reproduce your implementation.
+\texttt{homework\_loop\_sequential\_source} emits one temporary for each
+unrolled element.  It loads one element, completes all additions in that
+element's dependency chain, stores the result, and only then starts the next
+unrolled element.  This reduces loop-control overhead but deliberately leaves
+the dependency chains serialized.  \texttt{homework\_loop\_interleaved\_source}
+first loads all temporaries, then emits addition $j$ for every temporary before
+emitting addition $j+1$.  Finally it stores all temporaries.  Each element sees
+the same ordered floating-point operations as the reference, while independent
+chains are adjacent in the instruction stream and can execute concurrently.
+All generated constants use the required single-precision \texttt{f} suffix.
 
 \subsection{Results}
 
-Present the timing results for Part 1.
-
-The primary result should be a line graph showing speedup relative to the
-reference implementation.
+I used dependency-chain length 64, an array of 8,388,608 floats, and unroll
+factors 1 through 64.  Each point is the arithmetic mean of five complete
+runs.  The code was compiled with the supplied flags
+\texttt{-std=c++14 -fno-unroll-loops -O0}.
 
 \begin{figure}[H]
     \centering
-    % Replace with your actual figure.
-    \includegraphics[width=0.8\textwidth]{part1_results.pdf}
+    \includegraphics[width=0.88\textwidth]{part1_results.pdf}
     \caption{Part 1 speedup relative to the reference implementation.}
     \label{fig:part1-results}
 \end{figure}
 
-The x-axis should show the parameter being varied, and the y-axis should
-show speedup relative to the reference implementation.
-
-You should also include a table containing the raw timing measurements.
-Here is a sample table.
-
 \begin{table}[H]
     \centering
-    \caption{Part 1 timing results.}
+    \caption{Part 1 mean timing results (five runs per point). Times are seconds.}
     \label{tab:part1-results}
-    \begin{tabular}{cccc}
+    \small
+    \begin{tabular}{rrrrrr}
         \toprule
-        Parameter & Reference &  Sequential & Interleaved\\
+        Unroll & Reference & Sequential & Interleaved & Seq. speedup & Int. speedup\\
         \midrule
+        1  & 0.8543 & 0.8376 & 0.8462 & 1.020 & 1.010\\
+        2  & 0.8649 & 1.0845 & 0.7026 & 0.798 & 1.232\\
+        4  & 0.9162 & 1.0306 & 0.4469 & 0.889 & 2.055\\
+        8  & 0.8609 & 0.9811 & 0.2465 & 0.877 & 3.491\\
+        16 & 0.8385 & 0.9554 & 0.1607 & 0.878 & 5.219\\
+        32 & 0.8587 & 0.9444 & 0.1023 & 0.909 & 8.394\\
+        64 & 0.8476 & 0.9412 & 0.1005 & 0.901 & 8.430\\
         \bottomrule
     \end{tabular}
 \end{table}
 
+An independent correctness harness compared both generated loops element by
+element with the reference for chain lengths 1, 2, 4, 8, and 64 and every
+reported unroll factor.  All 35 combinations passed locally and in the course
+Docker image.
+
 \subsection{Analysis}
 
-Analyze the results from Part 1.
+The sequentially unrolled loop remains near the reference and is actually
+slower for every factor above one (roughly $0.80$--$0.91\times$).  Completing
+one dependency chain before beginning another exposes no additional ILP; it
+mainly changes loop overhead and enlarges the loop body.  With optimization
+disabled, extra temporaries and code size can outweigh the saved branches,
+which explains why this version did not reproduce the modest sequential
+unrolling improvement sometimes seen on other toolchains.
 
-Explain:
-
-\begin{itemize}
-    \item What trends you observe in the results.
-    \item Why the performance changes as the parameter is varied.
-    \item Why the optimized implementation differs from the reference implementation.
-    \item Any performance limitations or unexpected results.
-    \item Whether the results agree with your expectations.
-\end{itemize}
+The interleaved loop follows the expected trend.  Its speedup rises from
+$1.01\times$ at factor 1 to $3.49\times$ at factor 8 and $8.39\times$ at
+factor 32.  Interleaving gives the processor multiple independent addition
+chains, allowing pipeline bubbles caused by one chain's data dependency to be
+filled with work from other chains.  The curve is nearly flat from factor 32
+to 64 ($8.39\times$ versus $8.43\times$), indicating that the available
+execution width and latency-hiding capacity are already saturated; more
+unrolling only increases code size and register pressure.  The qualitative
+result agrees with the ILP model even though exact speedups are platform
+dependent.
 
 
 \section{Part 2}
 
 \subsection{Design}
 
+\texttt{homework\_reduction\_source} converts the single accumulator into
+\texttt{partitions} independent partial sums.  Array elements 0 through
+$P-1$ serve as the $P$ accumulators.  The main loop starts at index $P$,
+advances by $P$, and emits \texttt{a[p] += a[i+p]} for each partition $p$.
+Afterward, a cleanup loop combines accumulators 1 through $P-1$ into
+\texttt{a[0]}.  The input size and partition count are assumed to be powers of
+two, with the latter smaller than the former, so every element belongs to
+exactly one partial reduction and no remainder handling is required.
 
 
 \subsection{Results}
 
+I tested partition counts 1, 2, 4, 8, and 16, with five runs per point.  To
+avoid the 8 GiB total allocation made by the supplied default, the timing copy
+used 134,217,728 doubles per array (2 GiB total), a power-of-two reduction
+explicitly permitted by the assignment.  The submitted source retains the
+original size.  Tests used the actual checked-in compile setting,
+\texttt{-std=c++17 -fno-unroll-loops -O0}; the nearby comment describing
+\texttt{-O3} does not match that command.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{part2_results.pdf}
+    \caption{Part 2 reduction speedup relative to the reference.}
+    \label{fig:part2-results}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Part 2 mean timing results (five runs per point). Times are seconds.}
+    \label{tab:part2-results}
+    \begin{tabular}{rrrr}
+        \toprule
+        Partitions & Reference & Partitioned & Speedup\\
+        \midrule
+        1  & 0.1591 & 0.1528 & 1.040\\
+        2  & 0.1317 & 0.0999 & 1.322\\
+        4  & 0.1918 & 0.1237 & 1.550\\
+        8  & 0.1246 & 0.0752 & 1.656\\
+        16 & 0.1393 & 0.0813 & 1.713\\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Correctness tests used arrays of 1,024 ones and partition counts through 32;
+every run produced exactly 1,024 in \texttt{a[0]}.  The same suite passed in
+the course Docker image.
 
 \subsection{Analysis}
 
+Speedup increases monotonically from $1.04\times$ with one accumulator to
+$1.71\times$ with sixteen.  The reference carries a loop-carried dependency
+through \texttt{a[0]}, so every addition waits for the previous one.  Multiple
+partial sums break that long chain into independent chains and let the core
+overlap additions.  Improvement tapers after eight partitions because the
+processor has enough independent work to cover much of the addition latency;
+memory bandwidth, loop instructions, final cleanup, and finite execution
+resources then limit further gains.  Absolute times varied more than the
+speedup ratios, especially at four partitions, which is consistent with a
+short, memory-intensive benchmark sharing the machine with normal OS
+activity.  The monotonic ratios and independent correctness checks support the
+expected conclusion.
 
 \section{Part 3}
 
 \subsection{Design}
 
+\texttt{sequential\_increment} visits each array element in order and applies
+the required volatile increment $K$ times before moving on.  The round-robin
+implementation launches $N$ workers.  Worker \texttt{tid} starts at index
+\texttt{tid} and advances by $N$, exactly implementing
+$i \bmod N=\mathrm{tid}$; the caller joins every worker before returning.
+
+The custom implementation uses contiguous block decomposition.  Worker
+\texttt{tid} receives the half-open range
+$[\mathrm{tid}\cdot\mathrm{size}/N,
+(\mathrm{tid}+1)\cdot\mathrm{size}/N)$.  Integer endpoints cover the full
+array even when its size is not divisible by the thread count.  Each worker
+still increments the volatile array location directly and completes all $K$
+increments before moving to its next index.  Contiguous blocks reduce cache
+line sharing between workers compared with round-robin assignment.
 
 
 \subsection{Results}
 
+The experiment used \texttt{SIZE=1024} and \texttt{K=1048576}; the sequential
+computation averaged about 0.75 seconds, close to the requested one-second
+target.  Each thread count was measured five times with \texttt{-O0}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{part3_results.pdf}
+    \caption{Part 3 speedup relative to sequential execution.}
+    \label{fig:part3-results}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Part 3 mean timing results (five runs per point). Times are seconds.}
+    \label{tab:part3-results}
+    \small
+    \begin{tabular}{rrrrrr}
+        \toprule
+        Threads & Sequential & Round robin & Contiguous & RR speedup & Custom speedup\\
+        \midrule
+        1  & 0.7438 & 0.7346 & 0.7475 & 1.013 & 0.995\\
+        2  & 0.7450 & 0.8579 & 0.3817 & 0.877 & 1.953\\
+        4  & 0.7549 & 0.4598 & 0.2116 & 1.642 & 3.569\\
+        8  & 0.7528 & 0.2466 & 0.1605 & 3.076 & 4.692\\
+        16 & 0.7460 & 0.1954 & 0.1446 & 3.821 & 5.163\\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The correctness harness tested 1, 2, 4, 8, and 16 threads with 1,031 elements
+and $K=257$, intentionally making the array size non-divisible by most thread
+counts.  Every element of all three arrays equaled $K$, both locally and in
+the course Docker image.
+
 \subsection{Analysis}
+
+The contiguous strategy scales substantially better than round robin.  At two
+threads it achieves $1.95\times$, while round robin falls below sequential
+speed ($0.88\times$).  Adjacent round-robin elements occupy the same cache
+lines, so different cores repeatedly invalidate one another's lines even
+though they update different integers.  This false sharing is especially
+costly because every required increment is a volatile read-modify-write.  In
+the contiguous version, most cache lines are owned by only one worker, leaving
+only possible boundary lines shared; at two and four threads it is about
+$2.25\times$ and $2.17\times$ faster than round robin, respectively.
+
+Both parallel curves eventually flatten.  The custom speedup rises to
+$4.69\times$ at eight threads but only $5.16\times$ at sixteen, while
+round robin reaches $3.82\times$.  The test machine has ten heterogeneous CPU
+cores, so sixteen software threads oversubscribe the hardware.  Thread
+creation/join overhead, memory-system traffic, and the volatile load/store
+sequence also impose serial and bandwidth costs.  These limitations explain
+why speedup is sublinear and why contiguous ownership remains preferable.
+
+\section{Experimental Environment and Limitations}
+
+Measurements were collected on an Apple M4 MacBook Air with 10 CPU cores and
+16 GiB of memory, using Apple clang 17.0.0 on macOS.  Correctness was also
+verified with \texttt{g++} inside the supplied
+\texttt{reeselevine/cse113:latest} course image.  Timings were collected
+natively because containerized timings can include virtualization effects on
+macOS.  Consequently, the trends are meaningful but exact values should not
+be assumed to reproduce on the grading host.  The timing harness used fresh
+processes and arithmetic means; it did not pin threads, disable dynamic
+frequency scaling, or report confidence intervals.
 
 \end{document}
