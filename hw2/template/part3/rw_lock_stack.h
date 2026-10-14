@@ -1,3 +1,5 @@
+#pragma once
+#include <mutex>
 #include <shared_mutex>
 using namespace std;
 
@@ -20,6 +22,8 @@ class CSE113_Stack {
   }
   
   int pop() {
+    // Removing a node requires exclusive access for the whole traversal.
+    unique_lock<shared_mutex> guard(stack_mutex);
     if (start == NULL) {
       return -1;
     }
@@ -46,6 +50,8 @@ class CSE113_Stack {
 
   
   int peek() {
+    // Readers may traverse together; writers cannot remove their nodes.
+    shared_lock<shared_mutex> guard(stack_mutex);
     if (start == NULL) {
       return -1;
     }
@@ -58,6 +64,7 @@ class CSE113_Stack {
   }
   
   void push(int p) {
+    unique_lock<shared_mutex> guard(stack_mutex);
     if (start == NULL) {
 
       start = new Llist_node(p);
@@ -73,6 +80,7 @@ class CSE113_Stack {
   }
 
  private:
+  shared_mutex stack_mutex;
   Llist_node *start;  
 };
 

@@ -1,0 +1,141 @@
+[
+  {
+    "case": "filter",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"filter.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part1",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part1.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/filter",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "bakery",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"bakery.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part1",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part1.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/bakery",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "fair",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"fair_mutex.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part2",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part2.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/fair",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "coarse",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"coarse_lock_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/coarse",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "rw",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"rw_lock_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/rw",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "case": "swaptop",
+    "command": [
+      "/usr/bin/clang++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"swaptop_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-hlhr6xaa/swaptop",
+      "-DTEST_SWAPTOP",
+      "-fsanitize=thread"
+    ],
+    "compiler_output": "",
+    "returncode": -11,
+    "stdout": "",
+    "stderr": ""
+  }
+]

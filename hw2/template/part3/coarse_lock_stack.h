@@ -1,3 +1,4 @@
+#pragma once
 #include <mutex>
 using namespace std;
 
@@ -20,6 +21,7 @@ class CSE113_Stack {
   }
   
   int pop() {
+    lock_guard<mutex> guard(stack_mutex);
     if (start == NULL) {
       return -1;
     }
@@ -46,6 +48,7 @@ class CSE113_Stack {
 
   
   int peek() {
+    lock_guard<mutex> guard(stack_mutex);
     if (start == NULL) {
       return -1;
     }
@@ -58,6 +61,7 @@ class CSE113_Stack {
   }
   
   void push(int p) {
+    lock_guard<mutex> guard(stack_mutex);
     if (start == NULL) {
 
       start = new Llist_node(p);
@@ -73,6 +77,7 @@ class CSE113_Stack {
   }
 
  private:
+  mutex stack_mutex;
   Llist_node *start;  
 };
 

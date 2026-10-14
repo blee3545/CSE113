@@ -1,0 +1,33 @@
+total number: 76070
+8208
+9575
+9657
+9647
+9685
+9721
+9748
+9829
+total number: 34823
+4273
+4277
+4284
+4293
+4297
+4355
+4434
+4610
+total readers: 33324
+total writers: 56602
+total operations: 74163
+total pops: 12714
+total pushes: 13247
+total peeks: 48202
+total operations: 278761
+total pops: 17502
+total pushes: 16836
+total peeks: 244423
+total operations: 202413
+total pops: 1575
+total pushes: 1916
+total peeks: 177059
+total swaptops: 21863

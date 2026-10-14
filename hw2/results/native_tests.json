@@ -1,0 +1,135 @@
+[
+  {
+    "case": "filter",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"filter.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part1",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part1.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/filter"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "mutual exclusion and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "bakery",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"bakery.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part1",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part1.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/bakery"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "mutual exclusion and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "fair",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"fair_mutex.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part2",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part2.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/fair"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "shared readers, exclusive writers, and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "coarse",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"coarse_lock_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/coarse"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "rw",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"rw_lock_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/rw"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "swaptop",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"swaptop_stack.h\"",
+      "-I",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/template/part3",
+      "/Users/brianlee/vscode_projects/CSE113/hw2/tests/test_part3.cpp",
+      "-o",
+      "/var/folders/_k/81ptqj0n51j54x50w10698hm0000gn/T/hw2-tests-xgde363m/swaptop",
+      "-DTEST_SWAPTOP"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  }
+]

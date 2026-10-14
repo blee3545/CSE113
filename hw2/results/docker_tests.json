@@ -1,0 +1,135 @@
+[
+  {
+    "case": "filter",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"filter.h\"",
+      "-I",
+      "/assignments/template/part1",
+      "/assignments/tests/test_part1.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/filter"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "mutual exclusion and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "bakery",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"bakery.h\"",
+      "-I",
+      "/assignments/template/part1",
+      "/assignments/tests/test_part1.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/bakery"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "mutual exclusion and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "fair",
+    "command": [
+      "g++",
+      "-std=c++14",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"fair_mutex.h\"",
+      "-I",
+      "/assignments/template/part2",
+      "/assignments/tests/test_part2.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/fair"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "shared readers, exclusive writers, and exact counts passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "coarse",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"coarse_lock_stack.h\"",
+      "-I",
+      "/assignments/template/part3",
+      "/assignments/tests/test_part3.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/coarse"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "rw",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"rw_lock_stack.h\"",
+      "-I",
+      "/assignments/template/part3",
+      "/assignments/tests/test_part3.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/rw"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  },
+  {
+    "case": "swaptop",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-pthread",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-DTEST_HEADER=\"swaptop_stack.h\"",
+      "-I",
+      "/assignments/template/part3",
+      "/assignments/tests/test_part3.cpp",
+      "-o",
+      "/tmp/hw2-tests-0u8c0vwz/swaptop",
+      "-DTEST_SWAPTOP"
+    ],
+    "compiler_output": "",
+    "returncode": 0,
+    "stdout": "LIFO, empty cases, node counts, and concurrent operations passed\n",
+    "stderr": ""
+  }
+]
